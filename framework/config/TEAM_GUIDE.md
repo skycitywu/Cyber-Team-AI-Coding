@@ -33,7 +33,7 @@
 | Agent | 操作者 | 核心职责 | 详细指令 |
 |-------|--------|---------|---------|
 | **BA**（业务分析师） | 产品经理 | 需求结构化、生成 PRD 和 HTML 原型 | `config/roles/BA.md` |
-| **Arch**（架构师） | 开发负责人 | 架构设计、任务拆解 | `config/roles/ARCH.md` |
+| **Arch**（架构师） | 开发负责人 | 架构设计、任务拆解、脚手架搭建 | `config/roles/ARCH.md` |
 | **Dev**（开发者） | 开发负责人/成员 | TDD 方式编码实现 | `config/roles/DEV.md` |
 | **TechLead**（技术负责人） | 开发负责人 | 架构审查 + 代码 Review | `config/roles/TECHLEAD.md` |
 
@@ -55,7 +55,7 @@
 | **BA** | 需求结构化、提问澄清、原型布局 | 需求范围取舍、优先级排序 | 技术选型、架构决策 |
 | **Arch** | 技术栈选择、模块划分、接口设计 | 重大架构变更、新技术引入 | 需求理解、业务优先级 |
 | **Dev** | 实现细节、重构、bug 修复、TDD | 偏离架构设计、引入新依赖 | 需求变更、架构变更 |
-| **TechLead** | 风险评估、质量判断、审查意见 | 是否接受风险、是否推倒重来 | 最终业务决策、直接改代码 |
+| **TechLead** | 风险评估、质量判断、审查意见 | 是否接受风险、是否推倒重来 | 最终业务决策、直接改代码（含脚手架搭建） |
 
 ---
 
@@ -88,6 +88,8 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
                       [Arch] → ARCH.md + TASKS.md
                                   ↓
                                [TechLead 审查] → TECH_STATUS.md
+                                  ↓ 审查通过
+                               [Arch 搭建脚手架] → 项目骨架代码
                                   ↓
                                [Dev TDD] → 代码 + 测试 → TASKS.md 更新
                                   ↓
@@ -128,14 +130,16 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 2. Arch Agent 读取 PRD.md + 原型 → 产出 `docs/ARCH.md` + `docs/TASKS.md`
 3. 开发负责人审核架构设计
 4. 启动 TechLead Agent 审查架构 → 意见写入 `config/TECH_STATUS.md`
-5. 开发负责人决策：通过 → 进入第 3 步 / 需修改 → Arch 修改
-6. 更新 `config/PROJECT_STATUS.md`
-7. `git commit`（开发负责人账号）
+5. 开发负责人决策：通过 → 继续 / 需修改 → Arch 修改后重新审查
+6. 架构审查通过后，继续使用 Arch Agent 搭建脚手架（骨架代码 + 接口定义）
+7. 更新 `config/PROJECT_STATUS.md`
+8. `git commit`（开发负责人账号）
 
 **交接 Checklist**：
 - [ ] ARCH.md 模块划分清晰、接口定义明确
 - [ ] TASKS.md 每个任务有验收标准和负责人
 - [ ] TechLead 架构审查通过
+- [ ] 脚手架已搭建，项目可构建运行，各模块骨架接口与 ARCH.md 一致
 - [ ] PROJECT_STATUS.md 已更新
 
 ### 第 3 步：开发循环（每个任务重复）

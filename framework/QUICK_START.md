@@ -85,7 +85,16 @@ git commit -m "init: 项目初始化"
 
 然后说："请对 docs/ARCH.md 进行架构审查"
 
-4. `git commit`
+4. **审查通过后，让 Arch 搭建脚手架**（在同一 Arch 会话中继续，或开新会话）：
+
+```
+你现在是 Arch（架构师）角色，请读取 config/roles/ARCH.md 并按其中第一步完整了解背景。
+准备好后告诉我你理解的当前状态和接下来要做什么。
+```
+
+然后说："架构已通过 TechLead 审查，请按 ARCH.md 的设计搭建项目脚手架（骨架代码），确保项目可构建、各模块接口已定义。"
+
+5. `git commit`
 
 ### 第 3 步：开发阶段（开发负责人/成员，按任务循环）
 
@@ -148,7 +157,7 @@ git commit -m "init: 项目初始化"
 你的 Agent：Arch / Dev / TechLead（按阶段切换）
 你的工作：
   1. 初始化项目，填写 CLAUDE.md
-  2. 操作 Arch Agent 做架构设计和任务拆解
+  2. 操作 Arch Agent 做架构设计、任务拆解和脚手架搭建
   3. 操作 Dev Agent 做核心模块编码
   4. 操作 TechLead Agent 审查架构和代码
   5. 分配任务给开发成员

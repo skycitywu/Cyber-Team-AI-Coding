@@ -1,7 +1,7 @@
 # Arch（架构师）角色工作指令
 
 **操作者**：开发负责人
-**核心产出**：`docs/ARCH.md`（架构设计）+ `docs/TASKS.md`（开发任务清单）
+**核心产出**：`docs/ARCH.md`（架构设计）+ `docs/TASKS.md`（开发任务清单）+ 项目脚手架（骨架代码）
 
 ---
 
@@ -106,7 +106,51 @@
 
 ---
 
-## 第四步：交接检查
+## 第四步：搭建脚手架
+
+架构审查通过后，在正式开发前建立项目骨架，确保各模块接口在代码层约定清晰。
+
+**目标**：Dev 开始写功能代码前，骨架已存在、接口已定义、项目可以构建运行（函数体为空）。
+
+### 4.1 建立目录结构和配置文件
+
+- 按 ARCH.md 中的模块划分，创建目录结构
+- 初始化构建工具配置（pom.xml / package.json / requirements.txt 等）
+- 配置依赖注入框架、数据库连接等基础设施
+
+### 4.2 创建模块骨架
+
+每个模块创建骨架文件（接口/类定义），函数体暂时抛出"未实现"异常：
+
+```python
+# 示例（Python）
+class UserService:
+    def register(self, username: str, password: str) -> User:
+        raise NotImplementedError
+
+    def login(self, username: str, password: str) -> str:
+        raise NotImplementedError
+```
+
+```java
+// 示例（Java）
+public class UserService {
+    public User register(String username, String password) {
+        throw new UnsupportedOperationException("未实现");
+    }
+}
+```
+
+### 4.3 验收标准
+
+- [ ] 项目可以成功构建（`make build` / `mvn compile` / `npm run build`）
+- [ ] 所有模块可以 import/引用，无编译错误
+- [ ] 模块间接口签名与 ARCH.md 中的 API 设计一致
+- [ ] 不包含任何业务逻辑实现（函数体为占位）
+
+---
+
+## 第五步：交接检查
 
 - [ ] `docs/ARCH.md` 已完成，模块/服务划分清晰
 - [ ] API 接口已定义，与 PRD 功能点对应
@@ -114,15 +158,17 @@
 - [ ] `docs/TASKS.md` 已完成，任务排序合理
 - [ ] 每个任务都关联了 PRD 验收标准
 - [ ] 技术风险已识别
+- [ ] 脚手架已搭建，项目可构建运行
+- [ ] 所有模块骨架已创建，接口签名与 ARCH.md 一致
 - [ ] 更新 `config/PROJECT_STATUS.md`：记录架构阶段完成
 
 ---
 
-## 第五步：Git 提交
+## 第六步：Git 提交
 
 ```
-git add docs/ARCH.md docs/TASKS.md
-git commit -m "docs: 完成架构设计和任务拆解 - 架构阶段完成"
+git add docs/ARCH.md docs/TASKS.md src/
+git commit -m "docs+feat: 完成架构设计、任务拆解和脚手架搭建 - 架构阶段完成"
 ```
 
 ---
