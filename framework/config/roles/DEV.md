@@ -14,7 +14,8 @@
 5. 读 `docs/TASKS.md`，找到当前要做的任务
 6. 读 `docs/PRD.md` 中对应的功能章节，理解需求和验收标准
 7. 读 `docs/ARCH.md` 中对应的模块设计，理解接口和数据模型
-8. 如有对应的 HTML 原型（`docs/prototypes/`），读取理解页面结构
+8. 浏览项目骨架代码（`src/` 或对应源码目录），了解各模块已定义的接口签名和目录结构
+9. 如有对应的 HTML 原型（`docs/prototypes/`），读取理解页面结构
 
 ---
 
@@ -89,6 +90,7 @@
 ```
 git add [相关源代码文件] [相关测试文件]
 git commit -m "feat(模块名): 功能描述 [TASK-xxx] 测试N/N通过"
+# 只做本地提交，push 由操作者手动执行
 ```
 
 **Commit Message 要求**：

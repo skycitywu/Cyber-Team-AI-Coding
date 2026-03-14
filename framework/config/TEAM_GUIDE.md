@@ -108,7 +108,12 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 
 - [ ] 创建项目目录结构（可使用 `init_project.sh` 脚本）
 - [ ] 填写 `CLAUDE.md`（开发规范如有特殊要求、Git 团队配置）
-- [ ] `git init`，团队成员各自配置 Git 账号
+- [ ] `git init`，并切换到开发分支：`git checkout -b dev`
+- [ ] 各团队成员在本机确认 git 配置与 `CLAUDE.md` 中一致：
+  ```bash
+  git config user.name "姓名"
+  git config user.email "邮箱"
+  ```
 - [ ] 通知产品经理开始编写 `docs/INIT_REQ.md`
 
 ### 第 1 步：需求阶段（产品经理操作 BA Agent）
@@ -181,9 +186,10 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 
 当项目进行中需要变更需求时：
 1. 产品经理在 `docs/PRD.md` 末尾的「变更记录」中追加变更条目
-2. 启动 BA Agent 对话评估变更影响
+2. 启动 BA Agent 评估变更影响（告知 BA 当前架构约束，可提供 `docs/ARCH.md` 摘要作为上下文）
 3. 开发负责人评估技术影响，更新 `docs/ARCH.md` 和 `docs/TASKS.md`
-4. `docs/INIT_REQ.md` **永不修改**（保留原始意图作为对照）
+4. 若 ARCH.md 有实质变更，启动 TechLead Agent 重新审查架构；若接口签名有变更，Arch 更新脚手架后 TechLead 再审查脚手架
+5. `docs/INIT_REQ.md` **永不修改**（保留原始意图作为对照）
 
 ---
 
@@ -219,8 +225,14 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 
 ## 6. Git 审计机制
 
+### 基本原则
+
+- **AI 只做本地提交**：Agent 执行 `git add` + `git commit`，不执行 `git push`
+- **人工控制推送**：操作者在确认 commit 内容后手动执行 `git push`，对远程仓库的操作必须经人工确认
 - 所有操作通过 Git 记录，Agent 借用当前 Member 的 Git 账号提交
-- Git log 提供完整、可靠的审计追踪
+
+### 常用审计命令
+
 - 查看某个成员的提交：`git log --author="姓名"`
 - 查看某个文件的修改历史：`git log --follow 文件路径`
 

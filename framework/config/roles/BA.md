@@ -112,6 +112,7 @@
 ```
 git add docs/PRD.md docs/prototypes/
 git commit -m "docs: 完成PRD v1.0和HTML原型 - 需求阶段完成"
+# 只做本地提交，push 由操作者手动执行
 ```
 
 更新 `config/PROJECT_STATUS.md` 后再次提交：

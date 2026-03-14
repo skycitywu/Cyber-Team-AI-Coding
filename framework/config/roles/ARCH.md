@@ -168,8 +168,9 @@ public class UserService {
 ## 第六步：Git 提交
 
 ```
-git add docs/ARCH.md docs/TASKS.md src/
+git add docs/ARCH.md docs/TASKS.md [源码目录，如 src/ backend/ app/]
 git commit -m "docs+feat: 完成架构设计、任务拆解和脚手架搭建 - 架构阶段完成"
+# 只做本地提交，push 由操作者手动执行
 ```
 
 ---

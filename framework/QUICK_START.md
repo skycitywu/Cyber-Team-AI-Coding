@@ -76,7 +76,7 @@ git commit -m "init: 项目初始化"
 ```
 
 2. **审核产出**：`docs/ARCH.md` + `docs/TASKS.md`
-3. **启动 TechLead 审查架构**（可选但建议）：
+3. **启动 TechLead 审查架构**：
 
 ```
 你现在是 TechLead（技术负责人）角色，请读取 config/roles/TECHLEAD.md 并按其中第一步完整了解背景。
