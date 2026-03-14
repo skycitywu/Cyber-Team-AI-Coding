@@ -87,10 +87,12 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
                          ↓
                       [Arch] → ARCH.md + TASKS.md
                                   ↓
-                               [TechLead 审查] → TECH_STATUS.md
+                               [TechLead 审查架构] → TECH_STATUS.md
                                   ↓ 审查通过
                                [Arch 搭建脚手架] → 项目骨架代码
                                   ↓
+                               [TechLead 审查脚手架] → TECH_STATUS.md
+                                  ↓ 审查通过
                                [Dev TDD] → 代码 + 测试 → TASKS.md 更新
                                   ↓
                                [TechLead Review] → TECH_STATUS.md
@@ -132,14 +134,17 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 4. 启动 TechLead Agent 审查架构 → 意见写入 `config/TECH_STATUS.md`
 5. 开发负责人决策：通过 → 继续 / 需修改 → Arch 修改后重新审查
 6. 架构审查通过后，继续使用 Arch Agent 搭建脚手架（骨架代码 + 接口定义）
-7. 更新 `config/PROJECT_STATUS.md`
-8. `git commit`（开发负责人账号）
+7. 启动 TechLead Agent 审查脚手架 → 检查接口签名与 ARCH.md 一致性、模块边界、可构建性
+8. 开发负责人决策：通过 → 进入开发循环 / 需修改 → Arch 修改后重新审查
+9. 更新 `config/PROJECT_STATUS.md`
+10. `git commit`（开发负责人账号）
 
 **交接 Checklist**：
 - [ ] ARCH.md 模块划分清晰、接口定义明确
 - [ ] TASKS.md 每个任务有验收标准和负责人
 - [ ] TechLead 架构审查通过
 - [ ] 脚手架已搭建，项目可构建运行，各模块骨架接口与 ARCH.md 一致
+- [ ] TechLead 脚手架审查通过
 - [ ] PROJECT_STATUS.md 已更新
 
 ### 第 3 步：开发循环（每个任务重复）

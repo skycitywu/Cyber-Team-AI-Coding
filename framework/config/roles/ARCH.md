@@ -160,6 +160,7 @@ public class UserService {
 - [ ] 技术风险已识别
 - [ ] 脚手架已搭建，项目可构建运行
 - [ ] 所有模块骨架已创建，接口签名与 ARCH.md 一致
+- [ ] TechLead 脚手架审查通过（审查意见见 `config/TECH_STATUS.md`）
 - [ ] 更新 `config/PROJECT_STATUS.md`：记录架构阶段完成
 
 ---
