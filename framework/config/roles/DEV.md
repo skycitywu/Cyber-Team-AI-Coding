@@ -98,6 +98,19 @@ git commit -m "feat(模块名): 功能描述 [TASK-xxx] 测试N/N通过"
 - 标注测试通过情况
 - 如果是修复 Review 问题：`fix(模块名): 修复描述 关联Review#N`
 
+### ⏸️ 任务提交后停下来
+
+**Git 提交完成后，停下来等待 TechLead Review**：
+1. 你已更新 TASKS.md 状态为 `待Review`（在第四步）
+2. 等待 TechLead 进行代码审查
+3. TechLead 的意见会写入 `config/TECH_STATUS.md` 的"待处理汇总"
+4. 不要立即开始下一个任务，等待 Review 结果
+
+**不要继续做**：
+- 不要立即开始下一个任务
+- 不要修改已提交的代码（等 Review 反馈后再修改）
+- 不要修改 ARCH.md、PRD.md 等设计文档
+
 ---
 
 ## 第六步：处理 Review 反馈

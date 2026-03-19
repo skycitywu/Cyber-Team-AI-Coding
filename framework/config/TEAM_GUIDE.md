@@ -131,6 +131,10 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 - [ ] HTML 原型已生成，客户已确认
 - [ ] PROJECT_STATUS.md 已更新
 
+**⚠️ 需求阶段完成后停下来**：
+- 不要继续进行架构设计
+- 等待开发负责人启动 Arch Agent
+
 ### 第 2 步：架构阶段（开发负责人操作 Arch Agent）
 
 1. 启动 Claude Code，输入启动指令
@@ -161,8 +165,12 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
      ↓        更新 TASKS.md 状态为"待 Review"
      ↓        git commit（开发者账号）
      ↓
+     ⏸️ 停下来，等待 TechLead Review
+     ↓
 3c. TechLead Review — 读代码 → 写审查意见到 TECH_STATUS.md
      ↓                 更新 TASKS.md 状态为"修复中"（如有问题）
+     ↓
+     ⏸️ 停下来，等待 Dev 修复反馈
      ↓
 3d. 修复（如需要）— Dev 读 TECH_STATUS.md → 修复 → 重跑测试
      ↓               标记 TECH_STATUS.md 已解决
@@ -172,6 +180,11 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
      ↓
     下一个任务
 ```
+
+**⚠️ 角色间的停留点**：
+- Dev 提交代码 → **停下来**等待 TechLead Review（不要继续下一个任务）
+- TechLead 写完意见 → **停下来**等待 Dev 修复（不要主动进行下一个审查）
+- Dev 完成修复 → **停下来**等待 TechLead 验证（再次提交时标记为"已解决"）
 
 ### 第 4 步：集成验收
 
