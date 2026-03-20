@@ -1,7 +1,7 @@
-# 人机混合团队协作框架 v1.0
+# 人机混合团队协作框架 v1.1
 
 **用途**：定义团队协作规则、角色分工和工作流程
-**适用范围**：所有使用 Claude Code 进行 AI 辅助开发的项目
+**适用范围**：所有使用 Claude Code 进行 AI 辅助开发的项目（全新开发、二期接入、迭代优化）
 **阅读对象**：团队成员（人）+ Agent（AI）
 
 ---
@@ -17,7 +17,19 @@
 | **Agent** | Claude Code 中的 AI 助手，扮演特定角色（BA、Arch、Dev、TechLead） |
 | **操作者** | 当前正在使用 Claude Code 的 Member |
 
-### 1.2 基本原则
+### 1.2 项目模式
+
+本框架支持三种项目模式，核心开发循环一致，区别在于启动入口：
+
+| 模式 | 适用场景 | 基线文档状态 | 启动方式 |
+|------|---------|-------------|---------|
+| **全新开发** | 从零到一的新项目 | 不存在，需要创建 | 正常走第 0-4 步 |
+| **二期接入** | 已有人工开发的一期代码，需做二期 | 不存在，需要逆向重建 | 先走基线重建，再走正常流程 |
+| **迭代优化** | 已用本框架开发过，需做需求变更 | 已存在且准确 | PM 追加变更描述 → 开发负责人选路径 |
+
+当前项目的模式在 `CLAUDE.md` 的「项目阶段」字段中声明，所有 Agent 第一步了解背景时会读取。
+
+### 1.3 基本原则
 
 - **AI 做苦力，人做判断**：Agent 负责执行，Member 负责决策
 - **文档驱动交接**：所有 Agent 之间的协作通过文档传递，不依赖口头约定
@@ -32,10 +44,10 @@
 
 | Agent | 操作者 | 核心职责 | 详细指令 |
 |-------|--------|---------|---------|
-| **BA**（业务分析师） | 产品经理 | 需求结构化、生成 PRD 和 HTML 原型 | `config/roles/BA.md` |
-| **Arch**（架构师） | 开发负责人 | 架构设计、任务拆解、脚手架搭建 | `config/roles/ARCH.md` |
+| **BA**（业务分析师） | 产品经理 | 需求结构化、生成 PRD 和原型；逆向重建基线 PRD；变更评估 | `config/roles/BA.md` |
+| **Arch**（架构师） | 开发负责人 | 架构设计、任务拆解、脚手架搭建；逆向重建基线架构和代码导航；增量架构设计 | `config/roles/ARCH.md` |
 | **Dev**（开发者） | 开发负责人/成员 | TDD 方式编码实现 | `config/roles/DEV.md` |
-| **TechLead**（技术负责人） | 开发负责人 | 架构审查 + 代码 Review | `config/roles/TECHLEAD.md` |
+| **TechLead**（技术负责人） | 开发负责人 | 架构审查 + 代码 Review + 一期一致性审查 | `config/roles/TECHLEAD.md` |
 
 ### 2.2 Member 角色
 
@@ -74,14 +86,25 @@
 
 | 文件 | 用途 | 产出者 |
 |------|------|--------|
-| `INIT_REQ.md` | 原始需求（永久保留，不修改） | 产品经理手写 |
+| `INIT_REQ.md` | 原始需求 + 迭代需求（原始部分不修改，迭代在末尾追加） | 产品经理手写 |
 | `PRD.md` | 正式需求文档（含验收标准） | BA Agent |
 | `ARCH.md` | 架构设计文档 | Arch Agent |
 | `TASKS.md` | 开发任务清单（含状态跟踪） | Arch Agent 创建，Dev 更新状态 |
 | `prototypes/` | HTML 原型文件 | BA Agent |
 
-### 3.3 文档流转关系
+### 3.3 一期基线文档（docs/phase1/，仅二期接入项目）
 
+| 文件 | 用途 | 产出者 | 性质 |
+|------|------|--------|------|
+| `phase1/PRD.md` | 一期功能基线 | BA Agent（逆向重建） | **只读** |
+| `phase1/ARCH.md` | 一期架构基线 | Arch Agent（逆向重建） | **只读** |
+| `phase1/CODEBASE.md` | 一期代码导航（模块、接口、可复用组件） | Arch Agent（逆向重建） | **只读** |
+
+> **只读规则**：phase1/ 下的文件一旦经开发负责人校验后即冻结，后续不再修改。它们的作用是为二期开发提供"已有系统是什么样"的参考约束。
+
+### 3.4 文档流转关系
+
+**全新开发 / 二期正常开发 / 迭代开发（通用流程）：**
 ```
 INIT_REQ.md → [BA] → PRD.md + prototypes/
                          ↓
@@ -100,14 +123,41 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
                                [Dev 修复] → 代码修复 → TECH_STATUS.md 更新
 ```
 
+**二期接入 — 基线重建阶段（在通用流程之前执行）：**
+```
+PM 一期需求描述 + 一期代码
+     ↓
+  [BA 逆向重建] → phase1/PRD.md
+     ↓
+  [Arch 逆向重建] → phase1/ARCH.md + phase1/CODEBASE.md
+     ↓
+  [开发负责人 人工校验] → 基线冻结
+     ↓
+  PM 编写二期 INIT_REQ.md → 进入通用流程
+```
+
+**迭代优化 — 开发负责人判断走哪条路：**
+```
+PM 在 INIT_REQ.md「迭代需求」追加变更描述
+     ↓
+路径 A（直接开发）：
+  [Dev] → 读 INIT_REQ.md 变更 → 更新 TASKS.md → TDD → [TechLead Review]
+
+路径 B（先评估再开发）：
+  [BA 变更评估] → 更新 PRD.md
+     → [Arch]（按需）→ 更新 ARCH.md / TASKS.md
+     → [TechLead 审查架构]（如 ARCH.md 有变更）
+     → [Dev TDD] → [TechLead Review]
+```
+
 ---
 
 ## 4. 完整协作流程
 
 ### 第 0 步：项目初始化（开发负责人，一次性）
 
-- [ ] 创建项目目录结构（可使用 `init_project.sh` 脚本）
-- [ ] 填写 `CLAUDE.md`（开发规范如有特殊要求、Git 团队配置）
+- [ ] 创建项目目录结构（可使用 `init_project.sh` 脚本，二期项目使用 `--existing` 选项）
+- [ ] 填写 `CLAUDE.md`（开发规范、Git 团队配置、**项目阶段**）
 - [ ] `git init`，并切换到开发分支：`git checkout -b dev`
 - [ ] 各团队成员在本机确认 git 配置与 `CLAUDE.md` 中一致：
   ```bash
@@ -115,6 +165,51 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
   git config user.email "邮箱"
   ```
 - [ ] 通知产品经理开始编写 `docs/INIT_REQ.md`
+
+### 第 0.5 步：基线重建（仅二期接入项目）
+
+> 本步骤仅适用于 `CLAUDE.md` 项目阶段为"二期接入"的项目。全新开发和迭代优化跳过此步。
+
+**0.5a 准备材料（产品经理 + 开发负责人）**
+- [ ] 产品经理整理一期需求描述（文档、笔记、口述均可）
+- [ ] 开发负责人在 `CLAUDE.md` 中填写一期代码仓库路径
+- [ ] 确保 AI 可以访问一期代码仓库
+
+**0.5b BA 逆向重建基线 PRD（产品经理操作 BA Agent）**
+1. 启动 BA Agent，告诉它："请重建一期基线 PRD"
+2. BA 读取一期代码 + PM 的需求描述 → 与 PM 对话澄清 → 产出 `docs/phase1/PRD.md`
+3. BA 更新 PROJECT_STATUS.md
+4. `git commit`
+
+**交接 Checklist**：
+- [ ] phase1/PRD.md 已完成，覆盖一期所有功能
+- [ ] PROJECT_STATUS.md 已更新
+
+**⚠️ 完成后停下来**，等待开发负责人启动 Arch Agent 进行基线架构重建。
+
+**0.5c Arch 逆向重建基线架构（开发负责人操作 Arch Agent）**
+1. 启动 Arch Agent，告诉它："请重建一期基线架构"
+2. Arch 读取一期代码 + phase1/PRD.md → 产出 `docs/phase1/ARCH.md` + `docs/phase1/CODEBASE.md`
+3. Arch 更新 PROJECT_STATUS.md
+4. `git commit`
+
+**交接 Checklist**：
+- [ ] phase1/ARCH.md 已完成
+- [ ] phase1/CODEBASE.md 已完成
+- [ ] PROJECT_STATUS.md 已更新
+
+**⚠️ 完成后停下来**，等待开发负责人人工校验。
+
+**0.5d 人工校验基线文档（开发负责人）**
+1. 逐一审阅 phase1/PRD.md、phase1/ARCH.md、phase1/CODEBASE.md
+2. 对照一期代码验证关键信息的准确性
+3. 修正明显错误（逆向重建可能有遗漏或误判）
+4. 校验通过后，在 PROJECT_STATUS.md 中标记"基线重建阶段完成"
+5. `git commit`
+
+**⚠️ 基线冻结**：从此刻起，phase1/ 下的文件不再修改。
+
+**接下来**：产品经理编写二期 `docs/INIT_REQ.md`，然后走正常的第 1 步需求阶段。
 
 ### 第 1 步：需求阶段（产品经理操作 BA Agent）
 
@@ -195,14 +290,54 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 5. 更新 `config/PROJECT_STATUS.md` 为"完成"
 6. `git tag vX.Y`
 
-### 需求变更流程
+### 需求变更流程（开发过程中的临时变更）
 
 当项目进行中需要变更需求时：
-1. 产品经理在 `docs/PRD.md` 末尾的「变更记录」中追加变更条目
-2. 启动 BA Agent 评估变更影响（告知 BA 当前架构约束，可提供 `docs/ARCH.md` 摘要作为上下文）
-3. 开发负责人评估技术影响，更新 `docs/ARCH.md` 和 `docs/TASKS.md`
-4. 若 ARCH.md 有实质变更，启动 TechLead Agent 重新审查架构；若接口签名有变更，Arch 更新脚手架后 TechLead 再审查脚手架
-5. `docs/INIT_REQ.md` **永不修改**（保留原始意图作为对照）
+1. 产品经理在 `docs/INIT_REQ.md` 末尾的「迭代需求」区域追加变更描述
+2. 开发负责人判断：直接开发（路径 A）还是先评估（路径 B），详见「迭代优化流程」
+3. 若走路径 B：BA 评估 → 按需 Arch/TechLead → Dev 实现
+4. `docs/INIT_REQ.md` 的原始需求部分**不修改**（迭代需求只在末尾追加）
+
+### 迭代优化流程（交付后的新一轮变更）
+
+适用于已用本框架完成一轮开发交付后，用户提出迭代优化需求的场景。
+
+**第一步**：PM 在 `docs/INIT_REQ.md` 末尾的「迭代需求」区域追加变更描述（自然语言，篇幅不限）。
+
+**第二步**：开发负责人读完变更描述后，**二选一**：
+
+#### 路径 A：直接开发
+
+适用于开发负责人一看就知道怎么做的变更（bug 修复、UI 调整、简单功能）。
+
+```
+Dev Agent 读 INIT_REQ.md 变更描述 → 更新 TASKS.md → TDD 实现
+→ TechLead Review → 完成
+```
+
+**交接点**：
+- PM → 开发负责人：INIT_REQ.md 已追加变更描述
+- 开发负责人 → Dev：启动 Dev Agent，告诉它读 INIT_REQ.md 新增的变更
+
+#### 路径 B：先评估再开发
+
+适用于需要需求分析或架构考量的变更（新功能模块、多模块联动、架构调整）。
+
+```
+1. BA Agent 评估影响 → 更新 PRD.md
+2. 开发负责人按需操作：Arch 更新架构/任务 → TechLead 审查架构（如有变更）
+3. Dev 实现 → TechLead Review → 完成
+```
+
+**交接点**：
+- PM → BA：INIT_REQ.md 已追加变更描述
+- BA 产出 → 开发负责人：PRD.md 已更新
+- 开发负责人自行判断是否需要 Arch 评估架构，没必要的步骤直接跳过
+
+**⚠️ 迭代优化的关键原则**：
+- **变更输入在 INIT_REQ.md**：迭代需求追加在末尾，原始需求部分不修改
+- **不重写文档**：在现有 PRD.md、ARCH.md 上追加/修改，不新建文件
+- **不改基线**：如果项目有 phase1/ 基线文档，不修改它们
 
 ---
 
@@ -256,3 +391,4 @@ INIT_REQ.md → [BA] → PRD.md + prototypes/
 | 版本 | 日期 | 说明 |
 |------|------|------|
 | v1.0 | [创建日期] | 初始版本 |
+| v1.1 | [日期] | 增加二期接入（基线重建）和迭代优化支持 |
