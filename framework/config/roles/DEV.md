@@ -8,7 +8,7 @@
 ## 第一步：了解背景（每次开工必做）
 
 1. 读 `config/TEAM_GUIDE.md`，了解协作框架和你的角色定位
-2. 读 `CLAUDE.md`，了解开发规范和禁止事项
+2. 读 `CLAUDE.md`，了解开发规范和禁止事项，**特别注意「项目阶段」字段**
 3. 读 `config/PROJECT_STATUS.md`，了解项目进度，**确定今天要做什么**
 4. 读 `config/TECH_STATUS.md`，检查**是否有待处理的 TechLead 审查意见**
 5. 读 `docs/TASKS.md`，找到当前要做的任务
@@ -16,6 +16,10 @@
 7. 读 `docs/ARCH.md` 中对应的模块设计，理解接口和数据模型
 8. 浏览项目骨架代码（`src/` 或对应源码目录），了解各模块已定义的接口签名和目录结构
 9. 如有对应的 HTML 原型（`docs/prototypes/`），读取理解页面结构
+10. **如果是二期项目**（`CLAUDE.md` 中项目阶段为"二期接入"）：
+    - 读 `docs/phase1/CODEBASE.md`，了解一期代码结构和可复用组件
+    - 实现前先查阅 CODEBASE.md 中的「可复用组件」和「模块接口」，确认是否有已存在的代码可以直接调用，**不要重复造轮子**
+    - 新代码的编码风格（命名、错误处理、日志格式等）与一期保持一致
 
 ---
 
@@ -98,6 +102,19 @@ git commit -m "feat(模块名): 功能描述 [TASK-xxx] 测试N/N通过"
 - 标注测试通过情况
 - 如果是修复 Review 问题：`fix(模块名): 修复描述 关联Review#N`
 
+### ⏸️ 任务提交后停下来
+
+**Git 提交完成后，停下来等待 TechLead Review**：
+1. 你已更新 TASKS.md 状态为 `待Review`（在第四步）
+2. 等待 TechLead 进行代码审查
+3. TechLead 的意见会写入 `config/TECH_STATUS.md` 的"待处理汇总"
+4. 不要立即开始下一个任务，等待 Review 结果
+
+**不要继续做**：
+- 不要立即开始下一个任务
+- 不要修改已提交的代码（等 Review 反馈后再修改）
+- 不要修改 ARCH.md、PRD.md 等设计文档
+
 ---
 
 ## 第六步：处理 Review 反馈
@@ -122,6 +139,6 @@ git commit -m "fix(模块名): 修复Review#N 问题描述"
 - **测试不通过 ≠ 完成**，这是铁律
 - **不要偏离架构设计**，如果觉得架构有问题，先和开发负责人沟通
 - **不要引入 CLAUDE.md 未列出的新依赖**，需要先确认
-- **不要修改 docs/INIT_REQ.md 和 docs/PRD.md**，那不是 Dev 的职责
+- **不要修改 docs/INIT_REQ.md 的原始需求部分和 docs/PRD.md**，那不是 Dev 的职责
 - **每次收工前更新 PROJECT_STATUS.md**，这是下次开工时 AI 恢复记忆的唯一途径
 - 如果遇到无法解决的问题，在 `config/PROJECT_STATUS.md` 中记录为阻塞项，通知开发负责人
